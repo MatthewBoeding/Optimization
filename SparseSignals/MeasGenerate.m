@@ -1,4 +1,4 @@
-function A = MeasGenerate(M,N,method)
+function A = MeasGenerate(M,N,method, time)
  %Designed for homework 3 file
  %The three methods are time sampling at random,
  %Equidistant time sampling and discrete cosine transform
@@ -28,5 +28,8 @@ function A = MeasGenerate(M,N,method)
     elseif method == 6
         A = randn(M,N);
         A = normc(A);
+    end
+    if time == 0
+        A = abs(fft(A));
     end
 end

@@ -1,9 +1,9 @@
-function [success] = L1_Minimization(M,N,K,method)
+function [success] = L1_Minimization(M,N,K,method,time)
     options = optimoptions('linprog','Display','none');
     %Generate Signal
     x = SSGen(N,K);
     %Generate Measurement matrix from desired method
-    A = MeasGenerate(M,N,method);
+    A = MeasGenerate(M,N,method,time);
     y = A*x;
 
     [M,N] = size(A);
@@ -16,7 +16,8 @@ function [success] = L1_Minimization(M,N,K,method)
     for c = 1:N
         x_dif = x_dif + (x_hat(c)-x(c))^2;
     end
-        norm2 = sqrt(x_dif);
+        norm2 = norm(x_hat-x); 
+        %sqrt(x_dif);
 
     success = 0;
     if norm2 <= 10e-5
