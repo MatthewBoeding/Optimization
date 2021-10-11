@@ -22,19 +22,12 @@ function Homework3()
         end
     end
     recoveryRate1
-    figure(1);
-    title('Frequency Domain');
-    h = bar(recoveryRate1(:,1),recoveryRate1(:,2:7));
+    h = bar(recoveryRate(:,1),recoveryRate(:,2:7));
     grid on
     l = cell(1,6);
     l{1} = 'Random Time'; l{2} = 'Equi-Spaced Time'; l{3}= 'DCT'; l{4} = 'Low Freq Sample'; l{5} = 'Equispaced Freq'; l{6} = 'Random';
     legend(h,l);
     legend('Location', 'northwestoutside');
-    figure(2)
-    title('Time Domain');
-    q = bar(recoveryRate(:,1),recoveryRate(:,2:7));
-    grid on
-    legend(q,l);
-    legend('Location', 'northwestoutside');
+    h = bar(recoveryRate(:,1),recoveryRate(:,
     recoveryRate
 end

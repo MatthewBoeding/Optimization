@@ -30,7 +30,7 @@ function A = MeasGenerate(M,N,method, time)
         A = normc(A);
     end
     if time == 0
-        D = (1/sqrt(N))*(dct(eye(N)));
+        D = abs((1/sqrt(N))*(dct(eye(N))));
         A = A*D;
     end
 end
