@@ -1,4 +1,4 @@
-function [A,n] = createMatrix(useCase)
+function [A,M,B,n] = createMatrix(useCase, refBus, genBus);
 %Matpower cases for testing (see their documentation
 %Small: case300, case145, case118
 %Synthetic(large): case_ACTIVSg2000
@@ -11,18 +11,31 @@ n = size(mpc.bus,1);
 
 %Create Bus Admittance Matrices
 [Ybus, Yf, Yt] = makeYbus(mpc.baseMVA, mpc.bus, mpc.branch);
-%Translate bus relations to full matrix
-A = full(Ybus);
+%Create incidence matrices 
+M = zeros(size(Yf));
+YfFull = full(Yf);
+M = real(YfFull)';
+Mi = zeros(size(M));
+Mi(M > 0) = 1;
+Mi(M < 0) = -1;
 
-%NorAalize each column to allow for reduced coherence
-for col = 1:size(A,2)
-    A(:, col) = A(:, col)/norm(A(:, col));
-end
-
+%Create reactance Matrix
+Wb = diag((useCase.branch(:,4)).^(-1));
+B = Mi * Wb * Mi';
 %Choose a reference bus
-ref = randi(n);
+ref = refBus;
 %Remove from our measurement bus
-A(ref,:) = [];
-A(:,ref) = [];
+%B = imag(full(Ybus));
+B(ref,:) = [];
+B(:,ref) = [];
 
+Mi(ref,:) = [];
+
+%Measurement Matrix Formation
+B1 = inv(B);
+[Q,R] = qr(B);
+Q = Q';
+A = Q*Mi;
+A = normc(A);
+M = Mi;
 end
